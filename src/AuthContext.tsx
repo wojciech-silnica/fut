@@ -65,6 +65,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await supabase.auth.signOut()
       return pe.code === '23505' ? 'Ta nazwa użytkownika jest już zajęta' : pe.message
     }
+
+    await loadProfile(data.user.id)
     return null
   }
 
