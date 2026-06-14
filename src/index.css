@@ -417,15 +417,15 @@ body {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 13px;
+  font-size: 11px;
 }
 .standings-main-table th {
   text-align: center;
-  padding: 8px 4px;
-  font-size: 10px;
+  padding: 6px 2px;
+  font-size: 8px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .5px;
+  letter-spacing: 0;
   color: var(--text-dim);
   border-bottom: 1px solid var(--border);
   background: var(--surface);
@@ -434,40 +434,40 @@ body {
   text-overflow: ellipsis;
 }
 .standings-main-table td {
-  padding: 9px 4px;
+  padding: 7px 2px;
   text-align: center;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
 .standings-main-table .name-col {
   text-align: left;
-  padding-left: 6px;
+  padding-left: 4px;
 }
-.standings-main-table th.name-col { text-align: left; padding-left: 6px; }
-.standings-main-table .col-player { width: 18%; }
-.standings-main-table .col-total { width: 8%; }
-.standings-main-table .col-stage { width: 5.5%; }
-.standings-main-table .col-form { width: 23%; }
+.standings-main-table th.name-col { text-align: left; padding-left: 4px; }
+.standings-main-table .col-player { width: 22%; }
+.standings-main-table .col-total { width: 9%; }
+.standings-main-table .col-stage { width: 6.5%; }
+.standings-main-table .col-form { width: 24%; }
 .standings-main-table .stage-r32 {
-  width: 7%;
+  width: 7.5%;
   white-space: nowrap;
   overflow: visible;
   text-overflow: clip;
 }
 .standings-main-table .final-col {
-  width: 9%;
+  width: 10.5%;
   white-space: nowrap;
   overflow: visible;
   text-overflow: clip;
 }
-.standings-main-table .form-col { padding-left: 2px; padding-right: 2px; }
+.standings-main-table .form-col { padding-left: 1px; padding-right: 1px; }
 
 .standings-main-table .my-row td { background: rgba(46,160,67,.08); }
-.pts-total { font-size: 17px; font-weight: 700; color: var(--green); }
+.pts-total { font-size: 13px; font-weight: 700; color: var(--green); }
 
 .username-truncate {
   display: inline-block;
-  max-width: 14ch;
+  max-width: 11ch;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
