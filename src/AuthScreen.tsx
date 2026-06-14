@@ -13,8 +13,8 @@ export function AuthScreen() {
     e.preventDefault()
     setError('')
     
-    if (username.includes(' ')) {
-      setError('Nazwa użytkownika nie może zawierać spacji.')
+    if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+      setError('Nazwa użytkownika może zawierać tylko litery bez znaków specjalnych (a-z, 0-9, _, -).')
       return
     }
     
