@@ -224,6 +224,46 @@ body {
 /* ─── Stage sections ─────────────────────────────────────── */
 .predictions-wrap { padding: 8px 0 16px; }
 
+.past-matches-group {
+  margin-bottom: 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+.past-matches-summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface2);
+}
+
+.past-matches-summary::-webkit-details-marker { display: none; }
+
+.past-matches-summary .chevron {
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+
+.past-matches-group[open] .past-matches-summary .chevron {
+  transform: rotate(180deg);
+}
+
+.past-matches-group[open] .past-matches-summary {
+  border-bottom: 1px solid var(--border);
+}
+
+.past-matches-list .match-card:first-child {
+  border-top: none;
+}
+
 .stage-section { margin-bottom: 8px; }
 
 .stage-header {
@@ -253,7 +293,37 @@ body {
 }
 .match-card:last-child { border-bottom: 1px solid var(--border); }
 .match-card.locked { opacity: .85; }
-.match-card.played { border-left: 2px solid var(--green-dim); }
+.match-card.played-card { 
+  border-left: 2px solid var(--green-dim); 
+  padding: 0;
+}
+
+.played-card-summary {
+  padding: 10px 16px;
+  position: relative;
+}
+.played-card-summary .match-row {
+  margin-top: 4px;
+}
+
+.played-card-points {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+}
+
+.played-card-points .match-points {
+  position: static;
+  box-shadow: none;
+}
+
+.played-card-body {
+  padding: 0 16px 12px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 8px;
+  padding-top: 12px;
+}
 
 .played-details {
   display: block;

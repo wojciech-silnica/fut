@@ -168,9 +168,33 @@ export function PredictionsTab() {
 
   if (loadingData) return <div className="center-msg">Ładowanie...</div>
 
+  const playedMatches = matches.filter(m => m.home_score !== null && m.away_score !== null)
+  const upcomingMatches = matches.filter(m => m.home_score === null || m.away_score === null)
+
   return (
     <div className="predictions-wrap">
-      {matches.map(m => (
+      {playedMatches.length > 0 && (
+        <details className="past-matches-group" open={false}>
+          <summary className="past-matches-summary">
+            <span>Zakończone mecze ({playedMatches.length})</span>
+            <span className="chevron">▼</span>
+          </summary>
+          <div className="past-matches-list">
+            {playedMatches.map(m => (
+              <MatchCard
+                key={m.id}
+                match={m}
+                pred={preds[m.id]}
+                saving={saving === m.id}
+                onChange={handleChange}
+                onSave={save}
+              />
+            ))}
+          </div>
+        </details>
+      )}
+
+      {upcomingMatches.map(m => (
         <MatchCard
           key={m.id}
           match={m}
@@ -211,12 +235,44 @@ function MatchCard({ match, pred, saving, onChange, onSave }: CardProps) {
     return null
   }
 
+  if (played) {
+    return (
+      <div className={`match-card ${locked ? 'locked' : ''} played-card`}>
+        <div className="played-card-summary">
+          <div className="match-meta">
+            <span className="match-time">{formatMatchDate(match.match_date)}</span>
+          </div>
+          <div className="match-row">
+            <span className="team home-team">{match.home_team}</span>
+            <span className="result">{match.home_score}:{match.away_score}</span>
+            <span className="team away-team">{match.away_team}</span>
+          </div>
+          {pred && (
+            <div className="played-card-points">
+              <span className={`match-points pts pts-${getPointsClass(pred, match)}`}>
+                {points} pkt
+              </span>
+            </div>
+          )}
+        </div>
+        
+        <div className="played-card-body">
+          {pred ? (
+            <span className="your-pred">Twój typ: {pred.home}:{pred.away}</span>
+          ) : (
+            <span className="your-pred no-pred">Brak typowania</span>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className={`match-card ${locked ? 'locked' : ''} ${played ? 'played' : ''}`}>
+    <div className={`match-card ${locked ? 'locked' : ''}`}>
       <div className="match-meta">
         <span className="match-time">{formatMatchDate(match.match_date)}</span>
         <span className="match-deadline">
-          {!played && !locked && `typ do ${formatDeadline(match.deadline)}`}
+          {!locked && `typ do ${formatDeadline(match.deadline)}`}
         </span>
         {indicator()}
       </div>
@@ -224,24 +280,7 @@ function MatchCard({ match, pred, saving, onChange, onSave }: CardProps) {
       <div className="match-row">
         <span className="team home-team">{match.home_team}</span>
 
-        {played ? (
-          <details className="played-details">
-            <summary className="played-summary">
-              <span className="result">{match.home_score}:{match.away_score}</span>
-              {pred && (
-                <span className={`match-points pts pts-${getPointsClass(pred, match)}`}>
-                  {points} pkt
-                </span>
-              )}
-            </summary>
-
-            {pred && (
-              <div className="played-body">
-                <span className="your-pred">Twój typ: {pred.home}:{pred.away}</span>
-              </div>
-            )}
-          </details>
-        ) : locked ? (
+        {locked ? (
           <div className="result-display">
             <span className="result-placeholder">vs</span>
             {pred ? (
