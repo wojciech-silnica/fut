@@ -2,7 +2,10 @@ name: Update Football Results
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/10 * * * *"
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
