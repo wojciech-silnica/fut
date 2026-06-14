@@ -465,14 +465,13 @@ body {
 .standings-main-table .my-row td { background: rgba(46,160,67,.08); }
 .pts-total { font-size: 17px; font-weight: 700; color: var(--green); }
 
-.me-badge {
-  font-size: 10px;
-  background: var(--green-dim);
-  color: var(--green);
-  border-radius: 20px;
-  padding: 1px 6px;
-  margin-left: 6px;
-  font-weight: 600;
+.username-truncate {
+  display: inline-block;
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 .form-track {

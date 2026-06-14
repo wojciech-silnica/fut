@@ -14,7 +14,10 @@ interface AuthCtx {
 const Ctx = createContext<AuthCtx>(null!)
 
 // We store users as username@liga.local in Supabase auth
-const fakeEmail = (u: string) => `${u.toLowerCase().trim()}@liga.local`
+const fakeEmail = (u: string) => {
+  const normalized = u.toLowerCase().trim().replace(/\s+/g, '')
+  return `${normalized}@liga.local`
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
