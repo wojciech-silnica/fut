@@ -5,7 +5,7 @@ export function ScoringTab() {
 
       <article className="rules-card">
         <header className="rules-hero">
-          <h3>REGULAMIN LIGI TYPERÓW</h3>
+          <h3>REGULAMIN LIGI GOJÓW</h3>
         </header>
 
         <section className="rules-section">

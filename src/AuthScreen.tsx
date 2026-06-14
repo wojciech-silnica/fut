@@ -26,8 +26,8 @@ export function AuthScreen() {
   return (
     <div className="auth-wrap">
       <div className="auth-card">
-        <div className="auth-logo">LT</div>
-        <h1 className="auth-title">Liga Typerów</h1>
+        <div className="auth-logo">LG</div>
+        <h1 className="auth-title">Liga Gojów</h1>
         <p className="auth-sub">MŚ 2026</p>
 
         <div className="tab-switch">
