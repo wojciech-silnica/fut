@@ -53,7 +53,7 @@ export function AuthScreen() {
             <input
               type="text"
               required
-              maxLength={12}
+              maxLength={15}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Wpisz nazwę..."
