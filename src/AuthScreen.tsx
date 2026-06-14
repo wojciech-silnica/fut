@@ -9,9 +9,15 @@ export function AuthScreen() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  async function submit(e: React.FormEvent) {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!username.trim() || !password) return
+    setError('')
+    
+    if (username.includes(' ')) {
+      setError('Nazwa użytkownika nie może zawierać spacji.')
+      return
+    }
+    
     setLoading(true)
     setError(null)
 
@@ -45,11 +51,12 @@ export function AuthScreen() {
           <div className="field">
             <label>Nazwa użytkownika</label>
             <input
+              type="text"
+              required
+              maxLength={14}
               value={username}
-              onChange={e => setUsername(e.target.value)}
-              placeholder="jankowalski"
-              autoComplete="username"
-              autoCapitalize="none"
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Wpisz nazwę..."
             />
           </div>
           <div className="field">
