@@ -154,7 +154,7 @@ export function StandingsTab() {
               return (
                 <tr key={row.profile.id} className={isMe ? 'my-row' : ''}>
                   <td className="name-col">
-                    {isMe ? <strong className="username-truncate">{row.profile.username}</strong> : <span className="username-truncate">{row.profile.username}</span>}
+                    {isMe ? <strong>{row.profile.username}</strong> : <span>{row.profile.username}</span>}
                   </td>
                   <td className="pts-total">{row.total}</td>
                   {STAGE_ORDER.map(stage => (

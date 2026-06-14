@@ -465,15 +465,6 @@ body {
 .standings-main-table .my-row td { background: rgba(46,160,67,.08); }
 .pts-total { font-size: 13px; font-weight: 700; color: var(--green); }
 
-.username-truncate {
-  display: inline-block;
-  max-width: 11ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-}
-
 .form-track {
   display: flex;
   align-items: center;
