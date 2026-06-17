@@ -11,7 +11,7 @@ export function ScoringTab() {
         <section className="rules-section">
           <h4>1. Typowanie meczów</h4>
           <p>
-            Typy należy przesłać <strong>najpóźniej do godziny 23:59 dnia poprzedzającego mecze</strong> - ale w sumie nie jestem pewien bo nie ogarniam stref czasowych xd.
+            Typy należy przesłać <strong>najpóźniej do dwóch godzin przed rozpoczęciem każdego meczu.</strong>
           </p>
           <p>Po upływie terminu typy są ostateczne i nie mogą zostać zmienione.</p>
           <p>Każdy uczestnik typuje <strong>dokładny wynik meczu</strong> (np. 2:1, 0:0, 3:2).</p>
@@ -187,7 +187,7 @@ export function ScoringTab() {
 
         <section className="rules-section">
           <p>W przypadku zauważenia błędu w naliczaniu punktów uczestnik powinien zgłosić go organizatorowi niezwłocznie po publikacji wyników danej kolejki.</p>
-          <p>Powodzenia</p>
+          <p>Chwała Wiecznemu Izraelowi!</p>
         </section>
       </article>
     </div>
