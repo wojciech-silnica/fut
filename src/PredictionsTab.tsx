@@ -6,56 +6,11 @@ type PredMap = Record<number, { home: string; away: string; saved: boolean; dirt
 
 function parseDbDate(value: string) {
   const normalized = value.includes('T') ? value : value.replace(' ', 'T')
-  const withOffset = normalized.replace(/([+-]\d{2})$/, '$1:00')
-  const parsed = new Date(withOffset)
-  return Number.isNaN(parsed.getTime()) ? new Date(value) : parsed
-}
-
-function parseWarsawWallClock(value: string) {
-  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/)
-  if (!match) return parseDbDate(value)
-
-  const [, year, month, day, hour, minute, second = '0'] = match
-  const utcGuess = Date.UTC(
-    Number(year),
-    Number(month) - 1,
-    Number(day),
-    Number(hour),
-    Number(minute),
-    Number(second),
-  )
-
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Europe/Warsaw',
-    hour12: false,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  })
-
-  const parts = formatter.formatToParts(new Date(utcGuess))
-  const values: Record<string, string> = {}
-  for (const part of parts) {
-    if (part.type !== 'literal') values[part.type] = part.value
-  }
-
-  const warsawGuess = Date.UTC(
-    Number(values.year),
-    Number(values.month) - 1,
-    Number(values.day),
-    Number(values.hour),
-    Number(values.minute),
-    Number(values.second),
-  )
-
-  return new Date(utcGuess - (warsawGuess - utcGuess))
+  return new Date(normalized)
 }
 
 function isPastDeadline(deadline: string) {
-  const deadlineDate = parseWarsawWallClock(deadline)
+  const deadlineDate = parseDbDate(deadline)
   return Number.isFinite(deadlineDate.getTime()) ? Date.now() > deadlineDate.getTime() : false
 }
 
@@ -65,17 +20,15 @@ function formatMatchDate(dateStr: string) {
   return d.toLocaleString('pl-PL', {
     day: '2-digit', month: '2-digit',
     hour: '2-digit', minute: '2-digit',
-    timeZone: 'Europe/Warsaw',
   })
 }
 
 function formatDeadline(dateStr: string) {
-  const d = parseWarsawWallClock(dateStr)
+  const d = parseDbDate(dateStr)
   if (Number.isNaN(d.getTime())) return dateStr
   return d.toLocaleString('pl-PL', {
     day: '2-digit', month: '2-digit',
     hour: '2-digit', minute: '2-digit',
-    timeZone: 'Europe/Warsaw',
   })
 }
 
