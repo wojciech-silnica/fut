@@ -20,6 +20,7 @@ function formatMatchDate(dateStr: string) {
   return d.toLocaleString('pl-PL', {
     day: '2-digit', month: '2-digit',
     hour: '2-digit', minute: '2-digit',
+    timeZone: 'Europe/Warsaw'
   })
 }
 
@@ -29,6 +30,7 @@ function formatDeadline(dateStr: string) {
   return d.toLocaleString('pl-PL', {
     day: '2-digit', month: '2-digit',
     hour: '2-digit', minute: '2-digit',
+    timeZone: 'Europe/Warsaw'
   })
 }
 
