@@ -42,6 +42,9 @@ export function PredictionsTab() {
   const [loadingData, setLoadingData] = useState(true)
   const savingTimeout = useRef<Record<number, ReturnType<typeof setTimeout>>>({})
 
+  const [refreshing, setRefreshing] = useState(false)
+  const [flagWaves, setFlagWaves] = useState<number[]>([])
+
   useEffect(() => {
     load()
   }, [profile])
@@ -121,17 +124,44 @@ export function PredictionsTab() {
     setSaving(null)
   }
 
+  async function handleRefresh() {
+    try {
+      setRefreshing(true)
+      const { data, error } = await supabase.functions.invoke('refresh-matches')
+      if (error) throw error
+      if (data?.success) {
+        const waveId = Date.now()
+        setFlagWaves(prev => [...prev, waveId])
+        setTimeout(() => {
+          setFlagWaves(prev => prev.filter(id => id !== waveId))
+        }, 3500)
+        await load()
+      } else {
+        console.error('Błąd podczas odświeżania: ' + data?.error)
+      }
+    } catch (err: any) {
+      console.error('Wystąpił błąd podczas komunikacji z serwerem: ' + err.message)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
   if (loadingData) return <div className="center-msg">Ładowanie...</div>
 
   const playedMatches = matches.filter(m => m.home_score !== null && m.away_score !== null)
   const upcomingMatches = matches.filter(m => m.home_score === null || m.away_score === null)
+    .filter(m => m.home_team !== 'TBD' && m.away_team !== 'TBD')
 
   return (
     <div className="predictions-wrap">
+      {flagWaves.map(waveId => (
+        <FlagWave key={waveId} />
+      ))}
+
       {playedMatches.length > 0 && (
         <details className="past-matches-group" open={false}>
           <summary className="past-matches-summary">
-            <span>Zakończone mecze ({playedMatches.length})</span>
+            <span>Zakończone mecze ({playedMatches.length + 1})</span>
             <span className="chevron">▼</span>
           </summary>
           <div className="past-matches-list">
@@ -149,6 +179,17 @@ export function PredictionsTab() {
         </details>
       )}
 
+      <div className="refresh-actions" style={{ margin: '1rem 0', textAlign: 'center' }}>
+        <button 
+          className="btn-primary" 
+          onClick={handleRefresh}
+          disabled={refreshing}
+          style={{ width: '100%', maxWidth: '300px' }}
+        >
+          {refreshing ? 'Odświeżanie...' : 'KOCHAM IZRAEL'}
+        </button>
+      </div>
+
       {upcomingMatches.map(m => (
         <MatchCard
           key={m.id}
@@ -160,7 +201,7 @@ export function PredictionsTab() {
         />
       ))}
 
-      {matches.length === 0 && (
+      {upcomingMatches.length === 0 && playedMatches.length === 0 && (
         <div className="center-msg">Brak meczów do wyświetlenia</div>
       )}
     </div>
@@ -168,6 +209,33 @@ export function PredictionsTab() {
 }
 
 // ─── Single match card ────────────────────────────────────────────────────────
+
+function FlagWave() {
+  // Generate random properties once on mount to prevent jumping on re-renders
+  const flags = useRef(Array.from({ length: 50 }).map(() => ({
+    left: `${Math.random() * 100}%`,
+    duration: `${Math.random() * 2 + 1}s`,
+    delay: `${Math.random() * 0.5}s`
+  }))).current
+
+  return (
+    <div className="flag-overlay">
+      {flags.map((style, i) => (
+        <span 
+          key={i}
+          className="falling-flag" 
+          style={{ 
+            left: style.left,
+            animationDuration: style.duration,
+            animationDelay: style.delay
+          }}
+        >
+          🇮🇱
+        </span>
+      ))}
+    </div>
+  )
+}
 
 interface CardProps {
   match: Match
@@ -205,7 +273,7 @@ function MatchCard({ match, pred, saving, onChange, onSave }: CardProps) {
           {pred && (
             <div className="played-card-points">
               <span className={`match-points pts pts-${getPointsClass(pred, match)}`}>
-                {points} pkt
+                {points} pkt {getMultiplierText(match)}
               </span>
             </div>
           )}
@@ -290,6 +358,13 @@ function getPointsClass(pred: PredMap[number], match: Match): string {
   const raw = pts / mult
   if (raw >= 5) return 'great'
   if (raw >= 3) return 'good'
-  if (raw >= 2) return 'ok'
   return 'bad'
+}
+
+function getMultiplierText(match: Match): string {
+  const mult = match.stage === 'group' ? 1 : match.stage === 'r32' || match.stage === 'r16' ? 2 : match.stage === 'qf' || match.stage === 'sf' ? 3 : 4
+  if (mult > 1) {
+    return `(w tym mnożnik x${mult})`
+  }
+  return ''
 }

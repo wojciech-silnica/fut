@@ -701,3 +701,28 @@ body {
   font-size: 13px;
   line-height: 1.55;
 }
+
+/* Israel Flags Animation */
+.flag-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.falling-flag {
+  position: absolute;
+  top: -50px;
+  font-size: 2rem;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}

@@ -8,7 +8,7 @@ interface Row {
   profile: Profile
   total: number
   byStage: Record<StageKey, number>
-  form: Array<number | null>
+  form: Array<{ raw: number, final: number } | null>
 }
 
 const STAGE_ORDER: StageKey[] = ['group', 'r32', 'r16', 'qf', 'sf', 'final']
@@ -68,32 +68,35 @@ export function StandingsTab() {
         sf: 0,
         final: 0,
       }
-      const rawHistory: number[] = []
+      const history: { raw: number, final: number }[] = []
 
       for (const pred of orderedPreds) {
         const match = matchMap[pred.match_id]
         if (!match) continue
         if (match.home_score === null || match.away_score === null) continue
 
-        rawHistory.push(calcRawPoints(
+        const raw = calcRawPoints(
           pred.home_score, pred.away_score,
           match.home_score, match.away_score,
-        ))
+        )
 
-        const pts = calcPoints(
+        const final = calcPoints(
           pred.home_score, pred.away_score,
           match.home_score, match.away_score,
           match.stage,
         )
-        total += pts
-        byStage[match.stage] += pts
+
+        history.push({ raw, final })
+
+        total += final
+        byStage[match.stage] += final
       }
 
-      const recentRaw = rawHistory.slice(-5)
-      const form: Array<number | null> = Array(5).fill(null)
-      const startIndex = 5 - recentRaw.length
-      recentRaw.forEach((points, index) => {
-        form[startIndex + index] = points
+      const recentHistory = history.slice(-5)
+      const form: Array<{ raw: number, final: number } | null> = Array(5).fill(null)
+      const startIndex = 5 - recentHistory.length
+      recentHistory.forEach((pts, index) => {
+        form[startIndex + index] = pts
       })
 
       return { profile: p, total, byStage, form }
@@ -166,18 +169,18 @@ export function StandingsTab() {
                     </td>
                   ))}
                   <td className="form-col">
-                    <div className="form-track" aria-label={`Forma: ${row.form.filter(v => v !== null).join(', ')} punktów`}>
+                    <div className="form-track" aria-label={`Forma: ${row.form.filter(v => v !== null).map(v => v!.final).join(', ')} punktów`}>
                       {row.form.map((points, index) => (
                         <span
                           key={index}
                           className={`form-dot ${points === null ? 'empty' : ''}`}
                           style={points === null ? undefined : {
-                            backgroundColor: getFormColor(points),
-                            color: getFormTextColor(points),
+                            backgroundColor: getFormColor(points.raw),
+                            color: getFormTextColor(points.raw),
                           }}
-                          title={points === null ? 'Brak wyniku' : `${points} pkt`}
+                          title={points === null ? 'Brak wyniku' : `${points.final} pkt (bazowo ${points.raw})`}
                         >
-                          {points === null ? '' : points}
+                          {points === null ? '' : points.final}
                         </span>
                       ))}
                     </div>
@@ -198,10 +201,8 @@ export function StandingsTab() {
 
 function getFormColor(points: number): string {
   if (points <= 0) return '#000000'
-  if (points === 1) return '#b91c1c'
-  if (points === 2) return '#ea580c'
-  if (points === 3) return '#f59e0b'
-  if (points === 4) return '#84cc16'
+  if (points === 1 || points === 2) return '#b91c1c'
+  if (points === 3 || points === 4) return '#f59e0b'
   if (points === 5) return '#16a34a'
   return '#8b5cf6'
 }
