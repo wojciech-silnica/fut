@@ -356,6 +356,7 @@ function getPointsClass(pred: PredMap[number], match: Match): string {
   const pts = calcPredPoints(pred, match)
   const mult = match.stage === 'group' ? 1 : match.stage === 'r32' || match.stage === 'r16' ? 2 : match.stage === 'qf' || match.stage === 'sf' ? 3 : 4
   const raw = pts / mult
+  if (raw === 6) return 'perfect'
   if (raw >= 5) return 'great'
   if (raw >= 3) return 'good'
   return 'bad'

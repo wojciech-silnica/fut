@@ -470,6 +470,7 @@ body {
 .no-pred { color: var(--red); opacity: .7; }
 
 .pts { font-weight: 700; }
+.pts-perfect { color: #8b5cf6; }
 .pts-great { color: var(--green); }
 .pts-good  { color: #58a6ff; }
 .pts-ok    { color: var(--gold); }
